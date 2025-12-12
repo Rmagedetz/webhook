@@ -1,3 +1,4 @@
+sqlalchemy
 fastapi~=0.124.2
 uvicorn[standard]
-sqlalchemy
+
