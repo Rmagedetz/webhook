@@ -1,2 +1,4 @@
-fastapi
+fastapi~=0.124.2
 uvicorn[standard]
+SQLAlchemy~=2.0.45
+pymysql
