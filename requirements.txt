@@ -1,2 +1,4 @@
+SQLAlchemy~=2.0.43
+pymysql
 fastapi~=0.124.2
 uvicorn[standard]
