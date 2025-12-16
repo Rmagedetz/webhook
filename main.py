@@ -85,4 +85,7 @@ async def tilda_webhook(request: Request):
     except Exception:
         json_data = await request.json()
         print("Получены данные формы (JSON):", json_data)
+        Ankets.add_object(name='name',
+                          parent_main_name='parent',
+                          parent_main_phone='0001')
         return {"status": "ok", "source": "json"}
