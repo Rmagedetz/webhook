@@ -75,47 +75,44 @@ def session_scope():
 
 @app.post("/tilda-webhook")
 async def tilda_webhook(request: Request):
-    try:
-        form_data = await request.form()
-        data = dict(form_data)
-        print("Получены данные формы (form-data):", data)
-        return {"status": "ok", "source": "form"}
-    except Exception:
+
+    content_type = request.headers.get("content-type", "")
+
+    if "application/json" in content_type:
         json_data = await request.json()
+        print("Получены данные Tilda (JSON):")
+    else:
+        form_data = await request.form()
+        json_data = dict(form_data)
+        print("Получены данные Tilda (FORM):")
 
-        Ankets.add_object(name='',
-                          parent_main_name='',
-                          parent_main_phone='')
+    print(json_data)
 
-        # Ankets.add_object(
-        #     email=json_data.get('email', ''),
-        #     name=json_data.get('name', ''),
-        #     child_birthday=(
-        #         datetime.datetime.strptime(json_data['dob'], "%d.%m.%Y").date()
-        #         if json_data.get('dob') else None
-        #     ),
-        #     parent_main_name=json_data.get('custom_roditel', ''),
-        #     parent_main_phone=json_data.get('custom_telefon', ''),
-        #     parent_add='',
-        #     phone_add=json_data.get('custom_dopolnitelnyytelefon_2', ''),
-        #     leave='',
-        #     additional_contact='',
-        #     addr=json_data.get('custom_adresprozhivaniya', ''),
-        #     disease=json_data.get('custom_disease', ''),
-        #     allergy=json_data.get('custom_allergy', ''),
-        #     other=json_data.get('custom_other', ''),
-        #     physic=json_data.get('custom_physical', ''),
-        #     swimm=json_data.get('custom_swimming', ''),
-        #     jacket_swimm=json_data.get('custom_jacket_swimm', ''),
-        #     hobby='',
-        #     school=json_data.get('school', ''),
-        #     additional_info=json_data.get('custom_dop', ''),
-        #     departures='',
-        #     referer=json_data.get('custom_gorodok', ''),
-        #     ok='',
-        #     mailing=json_data.get('rassylka', ''),
-        #     personal_accept=json_data.get('personal-data', ''),
-        #     oms=json_data.get('custom_polis', ''),
-        # )
-        print("Получены данные формы (JSON):", json_data)
-        return {"status": "ok", "source": "json"}
+    Ankets.add_object(
+        email=json_data.get('email', ''),
+        name=json_data.get('name', ''),
+        child_birthday=(
+            datetime.datetime.strptime(json_data['dob'], "%d.%m.%Y").date()
+            if json_data.get('dob') else None
+        ),
+        parent_main_name=json_data.get('custom_roditel', ''),
+        parent_main_phone=json_data.get('custom_telefon', ''),
+        phone_add=json_data.get('custom_dopolnitelnyytelefon_2', ''),
+        addr=json_data.get('custom_adresprozhivaniya', ''),
+        disease=json_data.get('custom_disease', ''),
+        allergy=json_data.get('custom_allergy', ''),
+        other=json_data.get('custom_other', ''),
+        physic=json_data.get('custom_physical', ''),
+        swimm=json_data.get('custom_swimming', ''),
+        jacket_swimm=json_data.get('custom_jacket_swimm', ''),
+        school=json_data.get('school', ''),
+        additional_info=json_data.get('custom_dop', ''),
+        referer=json_data.get('custom_gorodok', ''),
+        mailing=json_data.get('rassylka', ''),
+        personal_accept=json_data.get('personal-data', ''),
+        oms=json_data.get('custom_polis', ''),
+    )
+
+    print("Данные сохранены в БД")
+
+    return {"status": "ok"}
