@@ -86,7 +86,7 @@ async def tilda_webhook(request: Request):
             email=json_data.get('email', ''),
             name=json_data.get('name', ''),
             child_birthday=(
-                datetime.datetime.strptime(json_data['dob'], "%Y-%m-%d").date()
+                datetime.datetime.strptime(json_data['dob'], "%d.%m.%Y").date()
                 if json_data.get('dob') else None
             ),
             parent_main_name=json_data.get('custom_roditel', ''),
