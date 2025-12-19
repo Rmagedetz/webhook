@@ -15,7 +15,7 @@ db_name = 'g_db_3'
 
 sql_connection_string = f"mysql+pymysql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
 
-engine = create_engine(sql_connection_string)
+engine = create_engine(sql_connection_string, pool_pre_ping=True, pool_recycle=3600)
 Base = declarative_base()
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
@@ -88,6 +88,9 @@ async def tilda_webhook(request: Request):
 
     print(json_data)
 
+    les_chudes = 'form1653431231'
+    gorodok = 'form798961203'
+
     Ankets.add_object(
         email=json_data.get('email', ''),
         name=json_data.get('name', ''),
@@ -96,8 +99,25 @@ async def tilda_webhook(request: Request):
             if json_data.get('dob') else None
         ),
         parent_main_name=json_data.get('custom_roditel', ''),
-        parent_main_phone=json_data.get('custom_telefon', ''),
-        phone_add=json_data.get('custom_dopolnitelnyytelefon_2', ''),
+
+        parent_main_phone=json_data.get('custom_telefon', '')
+        if json_data.get('formid', '') == les_chudes else json_data.get('phone', ''),
+
+        parent_add=json_data.get('custom_vtoroyroditel', '')
+        if json_data.get('formid', '') == gorodok else '',
+
+        phone_add=json_data.get('custom_dopolnitelnyytelefon', '')
+        if json_data.get('formid', '') == gorodok else json_data.get('custom_dopolnitelnyytelefon_2', ''),
+
+        leave=json_data.get('custom_custom_leave', '')
+        if json_data.get('formid', '') == gorodok else '',
+
+        additional_contact=json_data.get('custom_dop_contact', '')
+        if json_data.get('formid', '') == gorodok else '',
+
+        hobby=json_data.get('custom_hobby', '')
+        if json_data.get('formid', '') == gorodok else '',
+
         addr=json_data.get('custom_adresprozhivaniya', ''),
         disease=json_data.get('custom_disease', ''),
         allergy=json_data.get('custom_allergy', ''),
@@ -105,7 +125,10 @@ async def tilda_webhook(request: Request):
         physic=json_data.get('custom_physical', ''),
         swimm=json_data.get('custom_swimming', ''),
         jacket_swimm=json_data.get('custom_jacket_swimm', ''),
-        school=json_data.get('school', ''),
+
+        school=json_data.get('school', '')
+        if json_data.get('formid', '') == les_chudes else json_data.get('custom_uchebnoezavedenie', ''),
+
         additional_info=json_data.get('custom_dop', ''),
         referer=json_data.get('custom_gorodok', ''),
         mailing=json_data.get('rassylka', ''),
