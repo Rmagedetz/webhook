@@ -49,6 +49,7 @@ class Ankets(Base):
     mailing = Column(Text, nullable=True, default="")
     personal_accept = Column(String(10), nullable=True, default="")
     oms = Column(Text, nullable=True, default="")
+    st_class = Column(String(10), nullable=True, default="")
 
     @classmethod
     def add_object(cls, **parameters):
@@ -134,6 +135,7 @@ async def tilda_webhook(request: Request):
         mailing=json_data.get('rassylka', ''),
         personal_accept=json_data.get('personal-data', ''),
         oms=json_data.get('custom_polis', ''),
+        st_class=json_data.get('klass', '')
     )
 
     print("Данные сохранены в БД")
